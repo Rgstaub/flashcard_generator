@@ -29,25 +29,41 @@ function buildQuestion() {
           return true;
         }
       }        
+    },
+    {
+      type: 'input',
+      name: 'clozeCardFull',
+      message: "Enter the full statement",
+      when: function(type) {
+        if (type.cardType === "a 'Cloze-Deleted' card") {
+          return true;
+        }
+      }        
+    },
+    {
+      type: 'input',
+      name: 'clozeCardWithhold',
+      message: "Enter the text to remove from the full statement. This will be the answer",
+      when: function(type) {
+        if (type.cardType === "a 'Cloze-Deleted' card") {
+          return true;
+        }
+      }        
     }
   ]).then(function(choice) {
     if (choice.cardType === "a Basic card") {
       let newQuestion = new BasicCard(choice.basicCardFront, choice.basicCardBack);
-      console.log(`
-      ----------------------------------
-      You made ${choice.cardType}
-      Question: ${choice.basicCardFront}
-      Answer: ${choice.basicCardBack}`);
-      console.log(newQuestion)
+
+    } else if (choice.cardType === "a 'Cloze-Deleted' card") {
+      let newQuestion = new ClozeCard(choice.clozeCardFull, choice.clozeCardWithhold);
+      if (newQuestion.partial) {
+         
+      } else {
+        console.log("Invalid cloze. The cloze value is not contained in the full statement")
+      }
     }
   })
 }
 
-let newQuestion = new ClozeCard("The Carolina Panthers are the greatest team ever", "carolina panthers");
-if (newQuestion.partial) {
-  console.log(newQuestion);
-} else {
-  console.log("Invalid cloze. The cloze value is not contained in the full statement")
-}
 
 buildQuestion();
