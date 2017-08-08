@@ -53,7 +53,10 @@ function buildQuestion() {
   ]).then(function(choice) {
     if (choice.cardType === "a Basic card") {
       let newQuestion = new BasicCard(choice.basicCardFront, choice.basicCardBack);
-
+      console.log(`New basic flash card created!
+      Question: ${newQuestion.front}
+      Answer: ${newQuestion.back}`);
+      saveQuestion(newQuestion);
     } else if (choice.cardType === "a 'Cloze-Deleted' card") {
       let newQuestion = new ClozeCard(choice.clozeCardFull, choice.clozeCardWithhold);
       if (newQuestion.partial) {
@@ -65,5 +68,58 @@ function buildQuestion() {
   })
 }
 
+function saveQuestion(question) {
+  inquirer.prompt({
+  type: 'confirm',
+  name: 'save',
+  message: 'Do you want to save this question?'
+  }).then(function(data) {
+    if(data.save) question.save();
+    builderMenu();
+  })
+}
 
-buildQuestion();
+function getQuestions() {
+  let questions = require('./reader.js');
+  let arr = []
+  for (let i = 0; i < questions.questionsArr.length; i++) {
+    let str = `Front: ${questions.questionsArr[i].front}; Back: ${questions.questionsArr[i].back}`;
+    arr.push(str);
+  }
+  arr.push('<--- Go Back')
+  inquirer.prompt({
+    type: 'list',
+    name: 'questions',
+    message: "Select a question or return to the main menu",
+    choices: arr
+  }).then(function(question) {
+    if (question.questions === '<--- Go Back') {
+      builderMenu();
+    }
+    else {
+      let selected = arr.indexOf(question.questions);
+      deleteQuestion(selected);
+    }
+  })
+}
+
+function builderMenu() {
+  inquirer.prompt({
+    type: 'list',
+    name: 'action',
+    message: "What do you want to do?",
+    choices: [
+      "Create a new question",
+      "View my saved questions",
+      "Exit"
+    ]
+  }).then(function(choice) {
+    if (choice.action === "Create a new question") {
+      buildQuestion();
+    } else if (choice.action === "View my saved questions") {
+      getQuestions();
+    } else if (choice.action === "Exit") return;
+  })
+}
+
+builderMenu();

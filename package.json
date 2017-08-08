@@ -4,6 +4,7 @@
   "description": "Week 11 homework",
   "main": "BasicCard.js",
   "dependencies": {
+    "fs": "0.0.1-security",
     "inquirer": "^3.2.1"
   },
   "devDependencies": {},
