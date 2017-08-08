@@ -10,9 +10,7 @@ function BasicCard (front, back) {
 }
 
 BasicCard.prototype.save = function() {
-  fs.appendFile("./questions.json", JSON.stringify(this) + "\n", 'utf8', (err) => {
-    if (err) throw err;
-  })
+  fs.appendFileSync("./questions.json", JSON.stringify(this) + "\n", 'utf8')
 }
 
 

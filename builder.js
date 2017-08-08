@@ -1,6 +1,7 @@
 const BasicCard = require('./BasicCard.js');
 const ClozeCard = require('./ClozeCard.js');
 const inquirer = require('inquirer');
+const fs = require('fs');
 
 function buildQuestion() {
   inquirer.prompt([
@@ -14,7 +15,7 @@ function buildQuestion() {
       type: 'input',
       name: 'basicCardFront',
       message: "Enter the question",
-      when: function(type) {
+      when: (type) => {
         if (type.cardType === "a Basic card") {
           return true;
         }
@@ -24,7 +25,7 @@ function buildQuestion() {
       type: 'input',
       name: 'basicCardBack',
       message: "Enter the answer",
-      when: function(type) {
+      when: (type) => {
         if (type.cardType === "a Basic card") {
           return true;
         }
@@ -34,7 +35,7 @@ function buildQuestion() {
       type: 'input',
       name: 'clozeCardFull',
       message: "Enter the full statement",
-      when: function(type) {
+      when: (type) => {
         if (type.cardType === "a 'Cloze-Deleted' card") {
           return true;
         }
@@ -44,13 +45,13 @@ function buildQuestion() {
       type: 'input',
       name: 'clozeCardWithhold',
       message: "Enter the text to remove from the full statement. This will be the answer",
-      when: function(type) {
+      when: (type) => {
         if (type.cardType === "a 'Cloze-Deleted' card") {
           return true;
         }
       }        
     }
-  ]).then(function(choice) {
+  ]).then( (choice) => {
     if (choice.cardType === "a Basic card") {
       let newQuestion = new BasicCard(choice.basicCardFront, choice.basicCardBack);
       console.log(`New basic flash card created!
@@ -73,10 +74,18 @@ function saveQuestion(question) {
   type: 'confirm',
   name: 'save',
   message: 'Do you want to save this question?'
-  }).then(function(data) {
+  }).then( (data) => {
     if(data.save) question.save();
     builderMenu();
   })
+}
+
+function deleteQuestion(obj, index) {
+  obj.questionsArr.splice(index, 1);
+  fs.writeFileSync('./questions.json', "", 'utf8')
+  for (let i = 0; i < obj.questionsArr.length; i++) {
+    fs.appendFileSync('./questions.json', JSON.stringify(obj.questionsArr[i]) + "\n", 'utf8');
+  }
 }
 
 function getQuestions() {
@@ -92,13 +101,23 @@ function getQuestions() {
     name: 'questions',
     message: "Select a question or return to the main menu",
     choices: arr
-  }).then(function(question) {
+  }).then( (question) => {
     if (question.questions === '<--- Go Back') {
       builderMenu();
     }
     else {
       let selected = arr.indexOf(question.questions);
-      deleteQuestion(selected);
+      inquirer.prompt({
+        type: 'confirm',
+        name: 'delete',
+        message: "Do you want to delete this question?"
+      }).then( (choice) => {
+        if (choice.delete) {
+          deleteQuestion(questions, selected);
+          console.log("The question was deleted");
+        }
+        builderMenu();
+      })
     }
   })
 }
@@ -113,7 +132,7 @@ function builderMenu() {
       "View my saved questions",
       "Exit"
     ]
-  }).then(function(choice) {
+  }).then( (choice) => {
     if (choice.action === "Create a new question") {
       buildQuestion();
     } else if (choice.action === "View my saved questions") {
