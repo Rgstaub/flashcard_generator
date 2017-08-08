@@ -3,8 +3,11 @@ const ClozeCard = require('./ClozeCard.js');
 const inquirer = require('inquirer');
 const fs = require('fs');
 
+// Have the user choose which type of card and enter the content for the front and back
+// Call the object constructors and create the new card. Offer to save it to file
 function buildQuestion() {
   inquirer.prompt([
+    // Pick a card type
     {
       type: 'list',
       name: 'cardType',
@@ -21,6 +24,7 @@ function buildQuestion() {
         }
       }
     },
+    // Basic Card
     {
       type: 'input',
       name: 'basicCardBack',
@@ -31,6 +35,7 @@ function buildQuestion() {
         }
       }        
     },
+    // Cloze card
     {
       type: 'input',
       name: 'clozeCardFull',
@@ -51,12 +56,14 @@ function buildQuestion() {
         }
       }        
     }
+    // Use the inputs to create a new card
   ]).then( (choice) => {
     if (choice.cardType === "a Basic card") {
       let newQuestion = new BasicCard(choice.basicCardFront, choice.basicCardBack);
       console.log(`New basic flash card created!
       Question: ${newQuestion.front}
       Answer: ${newQuestion.back}`);
+      // Offer to save it to file
       saveQuestion(newQuestion);
     } else if (choice.cardType === "a 'Cloze-Deleted' card") {
       let newQuestion = new ClozeCard(choice.clozeCardFull, choice.clozeCardWithhold);
@@ -69,6 +76,7 @@ function buildQuestion() {
   })
 }
 
+// Use the built-in save method to append the card object to the questions.json file
 function saveQuestion(question) {
   inquirer.prompt({
   type: 'confirm',
@@ -80,6 +88,7 @@ function saveQuestion(question) {
   })
 }
 
+// Remove the selected question from the array of all question and re-write the file with the newly editted array
 function deleteQuestion(obj, index) {
   obj.questionsArr.splice(index, 1);
   fs.writeFileSync('./questions.json', "", 'utf8')
@@ -88,6 +97,7 @@ function deleteQuestion(obj, index) {
   }
 }
 
+// Pull the saved questions from the questions.json file and list them. Then give the option to delete a selevted file.
 function getQuestions() {
   let questions = require('./reader.js');
   let arr = []
@@ -122,6 +132,7 @@ function getQuestions() {
   })
 }
 
+// Main menu allows you to add new questions, see saved questions (and then delete), or exit the program
 function builderMenu() {
   inquirer.prompt({
     type: 'list',
