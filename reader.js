@@ -1,16 +1,27 @@
 const fs = require('fs');
 
-let data = fs.readFileSync('./questions.json', 'utf8');
-
-let questionsArr = [];
-
-questionsArr = data.split("\n");
-
-for (let i = 0; i < questionsArr.length-1; i++) {
-    questionsArr[i] = JSON.parse(questionsArr[i]);
+let Questions = function() {
+    let data = fs.readFileSync('./questions.json', 'utf8');
+    this.arr = data.split("\n");
+    for (let i = 0; i < this.arr.length-1; i++) {
+        this.arr[i] = JSON.parse(this.arr[i]);
+    }
+    this.arr.pop();
+    this.obj = {"array": this.arr};
+    this.writeQuestions = function(){
+        let strArr = []
+        strArr.push("<--- Go Back")
+        for (let i = 0; i < this.arr.length; i++) {
+            let str = `Question ${i+1})     Front: ${this.arr[i].front}     Back: ${this.arr[i].back}`;
+            strArr.push(str);
+        }
+        return strArr;
+    }
 }
-console.log(questionsArr);
-questionsArr.pop();
-let questionsObj = {questionsArr};
+module.exports = Questions;
 
-module.exports = questionsObj;
+//delete this
+// let test = new Questions();
+// console.log(test.writeQuestions());
+// console.log(test.obj);
+

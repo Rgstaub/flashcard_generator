@@ -1,5 +1,6 @@
 const BasicCard = require('./BasicCard.js');
 const ClozeCard = require('./ClozeCard.js');
+const Questions = require('./reader.js');
 const inquirer = require('inquirer');
 const fs = require('fs');
 
@@ -99,31 +100,26 @@ function deleteQuestion(obj, index) {
 
 // Pull the saved questions from the questions.json file and list them. Then give the option to delete a selevted file.
 function getQuestions() {
-  let questions = require('reader.js');
-  let arr = []
-  for (let i = 0; i < questions.questionsArr.length; i++) {
-    let str = `Front: ${questions.questionsArr[i].front}; Back: ${questions.questionsArr[i].back}`;
-    arr.push(str);
-  }
-  arr.push('<--- Go Back')
+  let questions = new Questions;
+  let questionsArr = questions.writeQuestions();
   inquirer.prompt({
     type: 'list',
     name: 'questions',
     message: "Select a question or return to the main menu",
-    choices: arr
-  }).then( (question) => {
-    if (question.questions === '<--- Go Back') {
+    choices: questionsArr
+  }).then( (selection) => {
+    if (selection.questions === '<--- Go Back') {
       builderMenu();
     }
     else {
-      let selected = arr.indexOf(question.questions);
+      let selected = questionsArr.indexOf(selection.questions);
       inquirer.prompt({
         type: 'confirm',
         name: 'delete',
         message: "Do you want to delete this question?"
       }).then( (choice) => {
         if (choice.delete) {
-          deleteQuestion(questions, selected);
+          deleteQuestion(questions.arr, selected);
           console.log("The question was deleted");
         }
         builderMenu();
@@ -153,3 +149,6 @@ function builderMenu() {
 }
 
 builderMenu();
+
+// delete this
+//getQuestions();
