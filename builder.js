@@ -99,7 +99,7 @@ function deleteQuestion(obj, index) {
 
 // Pull the saved questions from the questions.json file and list them. Then give the option to delete a selevted file.
 function getQuestions() {
-  let questions = require('./reader.js');
+  let questions = require('reader.js');
   let arr = []
   for (let i = 0; i < questions.questionsArr.length; i++) {
     let str = `Front: ${questions.questionsArr[i].front}; Back: ${questions.questionsArr[i].back}`;
