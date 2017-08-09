@@ -1,12 +1,17 @@
 const fs = require('fs');
 
+// This contructor reads the questions.json file and builds an object containing all
+// the saved questions so far
 let Questions = function() {
     let data = fs.readFileSync('./questions.json', 'utf8');
+    // Questions are separated by "\n". Convert to JSON objects and pack them into an array
     this.arr = data.split("\n");
     for (let i = 0; i < this.arr.length-1; i++) {
         this.arr[i] = JSON.parse(this.arr[i]);
     }
     this.arr.pop();
+    
+    // format the stored questions in a way that is friendlier to read
     this.writeQuestions = function(){
         let strArr = [];
         for (let i = 0; i < this.arr.length; i++) {
@@ -30,10 +35,7 @@ Questions.prototype.delete = function(index) {
     }
 }
 
+// Ready to go!
 module.exports = Questions;
 
-//delete this
-// let test = new Questions();
-// console.log(test.writeQuestions());
-// console.log(test.obj);
 

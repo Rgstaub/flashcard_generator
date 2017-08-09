@@ -57,7 +57,7 @@ function buildQuestion() {
         }
       }        
     }
-    // Use the inputs to create a new card
+  // Use the inputs to create a new card
   ]).then( (choice) => {
     if (choice.cardType === "a Basic card") {
       let newQuestion = new BasicCard(choice.basicCardFront, choice.basicCardBack);
@@ -68,10 +68,15 @@ function buildQuestion() {
       saveQuestion(newQuestion);
     } else if (choice.cardType === "a 'Cloze-Deleted' card") {
       let newQuestion = new ClozeCard(choice.clozeCardFull, choice.clozeCardWithhold);
-      if (newQuestion.partial) {
-         
+      if (newQuestion.front) {
+        console.log(`New cloze flash card created!
+        Question: ${newQuestion.front}
+        Answer: ${newQuestion.back}`);
+        // Offer to save it to file
+        saveQuestion(newQuestion); 
       } else {
-        console.log("Invalid cloze. The cloze value is not contained in the full statement")
+        console.log("Invalid cloze. The cloze value is not contained in the full statement");
+        builderMenu();
       }
     }
   })
@@ -105,7 +110,7 @@ function getQuestions() {
       builderMenu();
     }
     else {
-      // store which question was selected to be used later to delete that question
+      // store which question was selected. to be used later to delete that question
       let selected = questionsArr.indexOf(selection.questions);
       inquirer.prompt({
         type: 'confirm',
