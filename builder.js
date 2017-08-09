@@ -77,26 +77,18 @@ function buildQuestion() {
   })
 }
 
-// Use the built-in save method to append the card object to the questions.json file
+// Use the built-in save method to append the card object to the questions.json file after user confirmation
 function saveQuestion(question) {
   inquirer.prompt({
-  type: 'confirm',
-  name: 'save',
-  message: 'Do you want to save this question?'
+    type: 'confirm',
+    name: 'save',
+    message: 'Do you want to save this question?'
   }).then( (data) => {
     if(data.save) question.save();
     builderMenu();
   })
 }
 
-// Remove the selected question from the array of all question and re-write the file with the newly editted array
-function deleteQuestion(obj, index) {
-  obj.questionsArr.splice(index, 1);
-  fs.writeFileSync('./questions.json', "", 'utf8')
-  for (let i = 0; i < obj.questionsArr.length; i++) {
-    fs.appendFileSync('./questions.json', JSON.stringify(obj.questionsArr[i]) + "\n", 'utf8');
-  }
-}
 
 // Pull the saved questions from the questions.json file and list them. Then give the option to delete a selevted file.
 function getQuestions() {
@@ -108,18 +100,21 @@ function getQuestions() {
     message: "Select a question or return to the main menu",
     choices: questionsArr
   }).then( (selection) => {
+    // return to menu without deleting
     if (selection.questions === '<--- Go Back') {
       builderMenu();
     }
     else {
+      // store which question was selected to be used later to delete that question
       let selected = questionsArr.indexOf(selection.questions);
       inquirer.prompt({
         type: 'confirm',
         name: 'delete',
         message: "Do you want to delete this question?"
       }).then( (choice) => {
+        // if the user confirms, delete the selected question
         if (choice.delete) {
-          deleteQuestion(questions.arr, selected);
+          questions.delete(selected);
           console.log("The question was deleted");
         }
         builderMenu();
@@ -148,7 +143,6 @@ function builderMenu() {
   })
 }
 
+// Bring up the inquirer main menu when this file is run
 builderMenu();
 
-// delete this
-//getQuestions();
