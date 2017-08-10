@@ -1,3 +1,6 @@
 {"front":"Who is the King of Pop?","back":"Michael Jackson"}
 {"front":"What's cooler than being cool?","back":"Ice cold!"}
 {"fullText":"The Carolina Panthers are the greatest team ever","back":"Carolina Panthers","front":"The ____ ____ are the greatest team ever"}
+{"front":"How many feet in a yard?","back":"3"}
+{"fullText":"The name GOB is an acronym for George Oscar Bluth.","back":"Oscar","front":"The name GOB is an acronym for George ____ Bluth."}
+{"fullText":"Everybody plays a fool. There's no exception to the rule.","back":"no exception to the rule","front":"Everybody plays a fool. There's ____ ____ ____ ____ rule."}

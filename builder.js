@@ -102,7 +102,7 @@ function getQuestions() {
   inquirer.prompt({
     type: 'list',
     name: 'questions',
-    message: "Select a question or return to the main menu",
+    message: "Select a question to delete or return to the main menu",
     choices: questionsArr
   }).then( (selection) => {
     // return to menu without deleting
@@ -136,7 +136,7 @@ function builderMenu() {
     message: "What do you want to do?",
     choices: [
       "Create a new question",
-      "View my saved questions",
+      "View or delete my saved questions",
       "Exit"
     ]
   }).then( (choice) => {
