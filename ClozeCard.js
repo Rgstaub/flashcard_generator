@@ -34,7 +34,7 @@ function ClozeCard (text, cloze) {
     if (fullLowerCase.includes(clozeLowerCase)) {
       this.front = partialString;
     } else {
-      this.front = null;
+      this.front = 'Invalid Cloze';
     }
   } else {
     return new ClozeCard(text, cloze);

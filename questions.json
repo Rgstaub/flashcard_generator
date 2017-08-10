@@ -4,3 +4,4 @@
 {"front":"How many feet in a yard?","back":"3"}
 {"fullText":"The name GOB is an acronym for George Oscar Bluth.","back":"Oscar","front":"The name GOB is an acronym for George ____ Bluth."}
 {"fullText":"Everybody plays a fool. There's no exception to the rule.","back":"no exception to the rule","front":"Everybody plays a fool. There's ____ ____ ____ ____ rule."}
+{"front":"What is the capital of Massachussettes?","back":"Boston"}

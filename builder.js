@@ -61,6 +61,14 @@ function buildQuestion() {
   ]).then( (choice) => {
     if (choice.cardType === "a Basic card") {
       let newQuestion = new BasicCard(choice.basicCardFront, choice.basicCardBack);
+      // Make sure the question or answer is not blank
+      if (!newQuestion.front) {
+        console.log("Questions cannot be blank.");
+        return builderMenu();
+      } else if (!newQuestion.back) {
+        console.log("Answers cannot be blank.");
+        return builderMenu();
+      }
       console.log(`New basic flash card created!
       Question: ${newQuestion.front}
       Answer: ${newQuestion.back}`);
@@ -68,7 +76,14 @@ function buildQuestion() {
       saveQuestion(newQuestion);
     } else if (choice.cardType === "a 'Cloze-Deleted' card") {
       let newQuestion = new ClozeCard(choice.clozeCardFull, choice.clozeCardWithhold);
-      if (newQuestion.front) {
+      // Make sure the question or answer is not blank
+      if (!newQuestion.front) {
+        console.log("Questions cannot be blank.");
+        return builderMenu();
+      } else if (!newQuestion.back) {
+        console.log("Answers cannot be blank.");
+        return builderMenu();
+      } else if (newQuestion.front !== "Invalid Cloze") {
         console.log(`New cloze flash card created!
         Question: ${newQuestion.front}
         Answer: ${newQuestion.back}`);
@@ -142,7 +157,7 @@ function builderMenu() {
   }).then( (choice) => {
     if (choice.action === "Create a new question") {
       buildQuestion();
-    } else if (choice.action === "View my saved questions") {
+    } else if (choice.action === "View or delete my saved questions") {
       getQuestions();
     } else if (choice.action === "Exit") return;
   })
